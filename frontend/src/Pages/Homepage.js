@@ -6,6 +6,11 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import "../App.css";
 import Login from "../components/Authentication/Login";
 import SignUp from "../components/Authentication/SignUp";
+import LoginIcon from '@mui/icons-material/Login';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 
 const Homepage = () => {
   const [value, setValue] = React.useState("one"); //used in tabs
@@ -56,8 +61,8 @@ const Homepage = () => {
                 aria-label="secondary tabs example"
                 centered
               >
-                <Tab label="LOGIN" value="one" sx={{ width: "40%" }} />
-                <Tab label="SIGN UP" value="two" sx={{ width: "40%" }} />
+                <Tab icon={<LoginIcon />} iconPosition="start" label="LOGIN" value="one" sx={{ width: "40%" }} />
+                <Tab icon={<HowToRegIcon />} iconPosition="start" label="SIGN UP" value="two" sx={{ width: "40%" }} />
               </TabList>
               <TabPanel value="one">
                 <Login />

@@ -1,14 +1,14 @@
 import {
-  FormControl,
   Stack,
   TextField,
   InputAdornment,
   Button,
+  IconButton,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
 import { useState } from "react";
-
+import {Visibility, VisibilityOff} from "@mui/icons-material"
 const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -38,13 +38,13 @@ const Login = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Button
+                <IconButton
                   aria-label="toggle password visibility"
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                 >
-                  {showPassword ? "hide" : "show"}
-                </Button>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
               </InputAdornment>
             ),
           }}

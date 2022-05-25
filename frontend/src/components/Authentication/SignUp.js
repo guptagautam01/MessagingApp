@@ -1,13 +1,19 @@
 import {
-  FormControl,
   Stack,
   TextField,
   InputAdornment,
   Button,
+  IconButton,
+  Input,
+  Typography
 } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
 import { useState } from "react";
+import {Visibility, VisibilityOff} from "@mui/icons-material"
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import "../../App.css";
+import { styled } from '@mui/material/styles';
 
 const SignUp = () => {
   const [name, setName] = useState();
@@ -24,11 +30,18 @@ const SignUp = () => {
   const handleClickShowConfirm = () => setShowConfirm(!showConfirm);
   const handleMouseDownConfirm = () => setShowConfirm(!showConfirm);
 
+  const postDetails = (pics) => {
+    
+  }
   const submitHandler = () => {};
 
+  const Input = styled('input')({
+    display: 'none',
+  });
+
   return (
-    <Container>
-      <Stack spacing={3}>
+    <Container className = "signUpConatiner" xs>
+      <Stack spacing={2} sx={{marginTop:"6px"}}>
         <TextField
           variant="outlined"
           label="Name"
@@ -51,13 +64,13 @@ const SignUp = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Button
+                <IconButton
                   aria-label="toggle password visibility"
                   onClick={handleClickShowPassword}
                   onMouseDown={handleMouseDownPassword}
                 >
-                  {showPassword ? "hide" : "show"}
-                </Button>
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
               </InputAdornment>
             ),
           }}
@@ -71,17 +84,25 @@ const SignUp = () => {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Button
+                <IconButton
                   aria-label="toggle password visibility"
                   onClick={handleClickShowConfirm}
                   onMouseDown={handleMouseDownConfirm}
                 >
-                  {showConfirm ? "hide" : "show"}
-                </Button>
+                  {showConfirm ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
               </InputAdornment>
             ),
           }}
         />
+        <label htmlFor="icon-button-file">
+
+        <Input accept="image/*" id="icon-button-file" type="file" onChange={(e) => postDetails(e.target.files[0])}/>
+        <IconButton color="primary" aria-label="upload picture" component="span" sx={{border:"solid 1px grey", borderRadius:"5px"}}>
+          <PhotoCamera />
+          <Typography sx={{marginLeft:"4px"}}>  Profile Picture </Typography>
+        </IconButton>
+        </label>
         <Button
           variant="contained"
           onClick={submitHandler}

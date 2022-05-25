@@ -3,3 +3,13 @@
   display: flex;
   background-image: linear-gradient(to top right, #37d4a1, #22a492);
 }
+.signUpConatiner{
+  height: 60vh;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.signUpConatiner::-webkit-scrollbar {
+  display: none;
+}

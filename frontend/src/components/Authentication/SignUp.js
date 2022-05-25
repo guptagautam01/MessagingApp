@@ -4,8 +4,8 @@ import {
   InputAdornment,
   Button,
   IconButton,
-  Input,
-  Typography
+  Snackbar,
+  Typography,
 } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
@@ -14,6 +14,9 @@ import {Visibility, VisibilityOff} from "@mui/icons-material"
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import "../../App.css";
 import { styled } from '@mui/material/styles';
+import axios from "axios";
+import {useHistory} from 'react-router-dom';
+import CloseIcon from '@mui/icons-material/Close';
 
 const SignUp = () => {
   const [name, setName] = useState();
@@ -21,6 +24,7 @@ const SignUp = () => {
   const [password, setPassword] = useState();
   const [confirmpassword, setConfirmpassword] = useState();
   const [pic, setPic] = useState();
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -30,10 +34,123 @@ const SignUp = () => {
   const handleClickShowConfirm = () => setShowConfirm(!showConfirm);
   const handleMouseDownConfirm = () => setShowConfirm(!showConfirm);
 
+  const [snackStatus, setSnackStatus] = useState(false);
+  const [snackMessage, setSnackMessage] = useState("");
+
+  const history = useHistory();
+
   const postDetails = (pics) => {
-    
+    setLoading(true);
+    if(pics === undefined){
+      // <Snackbar
+      //   open="true"
+      //   autoHideDuration={6000}
+      //   onClose ={(event, reason) => {
+      //     if (reason === 'clickaway') {
+      //       return;
+      //     }
+      //     setSnackStatus(false);
+      //   }}
+      //   message="Please select an image"
+      //   //action={action}
+      // />
+      setSnackMessage("Please select an image");
+      setSnackStatus(true);
+      setLoading(false);
+      return;
+    }
+
+    if(pics.type==="image/jpeg" || pics.type==="image/png"){
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "mern-chat-app");
+      data.append("cloud_name", "gautamg");
+      fetch("https://api.cloudinary.com/v1_1/gautamg/image/upload", {
+        method:"post",
+        body: data,
+      }).then((res) => res.json())
+      .then(data => {
+        setPic (data.url.toString());
+        console.log(data.url.toString());
+        setLoading(false);
+      })
+      .catch((err) =>{
+        console.log(err);
+        setLoading(false);
+      });
+    }else{
+      // <Snackbar
+      //   open="true"
+      //   autoHideDuration={6000}
+      //   //onClose={handleClose}
+      //   message="Please select an image"
+      //   //action={action}
+      // />
+      setSnackMessage("Please select an image");
+      setSnackStatus(true);
+      setLoading(false);
+      return;
+    }
   }
-  const submitHandler = () => {};
+  const submitHandler = async() => {
+    setLoading(true);
+    if(!name || !email || !password || !confirmpassword){
+      // <Snackbar
+      //   open="true"
+      //   autoHideDuration={6000}
+      //   //onClose={handleClose}
+      //   message="Please fill all the fields"
+      //   //action={action}
+      // />
+      setSnackMessage("Please fill all the fields");
+      setSnackStatus(true);
+      setLoading(false);
+      return;
+    }
+    if(password !== confirmpassword){
+      setSnackStatus(true);
+      setSnackMessage("Passwords do not match!")
+      setLoading(false);
+      return;
+    }
+    try {
+      const config = {
+        headers: {
+          "Content-type" : "application/json",
+        }
+      }
+      const {data} = await axios.post("/api/user", {name, email, password, pic}, config);
+      // <Snackbar
+      //   open="true"
+      //   autoHideDuration={6000}
+      //   //onClose={handleClose}
+      //   message="Succesful Registeration!"
+      //   //action={action}
+      // />
+
+      setSnackMessage("Succesful Registeration!");
+      setSnackStatus(true);
+
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+
+      history.push("/chat");
+    } catch (error) {
+      // <Snackbar
+      //   open="true"
+      //   autoHideDuration={6000}
+      //   //onClose={handleClose}
+      //   message="Error Encountered!"
+      //   //action={action}
+      // />
+
+      setSnackMessage("Error Encountered");
+      setSnackStatus(true);
+
+      console.log(error);
+      setLoading(false);
+    }
+  };
 
   const Input = styled('input')({
     display: 'none',
@@ -109,11 +226,37 @@ const SignUp = () => {
           color="primary"
           size="large"
           sx={{ width: "50%", position: "relative", left: "25%" }}
+          disabled = {loading ? true : false}
         >
           Sign Up
         </Button>
       </Stack>
+      <Snackbar
+        open = {snackStatus}
+        autoHideDuration={6000}
+        onClose={(event, reason) => {
+          if (reason === 'clickaway') {
+            return;
+          }
+          setSnackStatus(false);
+        }}
+        message = {snackMessage}
+        action={
+          <IconButton 
+            color="inherit"
+            onClick={(event, reason) => {
+              if (reason === 'clickaway') {
+                return;
+              }
+              setSnackStatus(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
+      />
     </Container>
+    
   );
 };
 

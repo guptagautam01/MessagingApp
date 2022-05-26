@@ -10,13 +10,13 @@ import {
 import { Container } from "@mui/system";
 import React from "react";
 import { useState } from "react";
-import {Visibility, VisibilityOff} from "@mui/icons-material"
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import "../../App.css";
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import axios from "axios";
-import {useHistory} from 'react-router-dom';
-import CloseIcon from '@mui/icons-material/Close';
+import { useHistory } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
 
 const SignUp = () => {
   const [name, setName] = useState();
@@ -41,7 +41,7 @@ const SignUp = () => {
 
   const postDetails = (pics) => {
     setLoading(true);
-    if(pics === undefined){
+    if (pics === undefined) {
       // <Snackbar
       //   open="true"
       //   autoHideDuration={6000}
@@ -60,25 +60,26 @@ const SignUp = () => {
       return;
     }
 
-    if(pics.type==="image/jpeg" || pics.type==="image/png"){
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
       const data = new FormData();
       data.append("file", pics);
       data.append("upload_preset", "mern-chat-app");
       data.append("cloud_name", "gautamg");
       fetch("https://api.cloudinary.com/v1_1/gautamg/image/upload", {
-        method:"post",
+        method: "post",
         body: data,
-      }).then((res) => res.json())
-      .then(data => {
-        setPic (data.url.toString());
-        console.log(data.url.toString());
-        setLoading(false);
       })
-      .catch((err) =>{
-        console.log(err);
-        setLoading(false);
-      });
-    }else{
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          console.log(data.url.toString());
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
       // <Snackbar
       //   open="true"
       //   autoHideDuration={6000}
@@ -91,10 +92,10 @@ const SignUp = () => {
       setLoading(false);
       return;
     }
-  }
-  const submitHandler = async() => {
+  };
+  const submitHandler = async () => {
     setLoading(true);
-    if(!name || !email || !password || !confirmpassword){
+    if (!name || !email || !password || !confirmpassword) {
       // <Snackbar
       //   open="true"
       //   autoHideDuration={6000}
@@ -107,19 +108,23 @@ const SignUp = () => {
       setLoading(false);
       return;
     }
-    if(password !== confirmpassword){
+    if (password !== confirmpassword) {
       setSnackStatus(true);
-      setSnackMessage("Passwords do not match!")
+      setSnackMessage("Passwords do not match!");
       setLoading(false);
       return;
     }
     try {
       const config = {
         headers: {
-          "Content-type" : "application/json",
-        }
-      }
-      const {data} = await axios.post("/api/user", {name, email, password, pic}, config);
+          "Content-type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        "/api/user",
+        { name, email, password, pic },
+        config
+      );
       // <Snackbar
       //   open="true"
       //   autoHideDuration={6000}
@@ -144,7 +149,7 @@ const SignUp = () => {
       //   //action={action}
       // />
 
-      setSnackMessage("Error Encountered");
+      setSnackMessage(error.response.data.message);
       setSnackStatus(true);
 
       console.log(error);
@@ -152,13 +157,13 @@ const SignUp = () => {
     }
   };
 
-  const Input = styled('input')({
-    display: 'none',
+  const Input = styled("input")({
+    display: "none",
   });
 
   return (
-    <Container className = "signUpConatiner" xs>
-      <Stack spacing={2} sx={{marginTop:"6px"}}>
+    <Container className="signUpConatiner" xs>
+      <Stack spacing={2} sx={{ marginTop: "6px" }}>
         <TextField
           variant="outlined"
           label="Name"
@@ -213,12 +218,24 @@ const SignUp = () => {
           }}
         />
         <label htmlFor="icon-button-file">
-
-        <Input accept="image/*" id="icon-button-file" type="file" onChange={(e) => postDetails(e.target.files[0])}/>
-        <IconButton color="primary" aria-label="upload picture" component="span" sx={{border:"solid 1px grey", borderRadius:"5px"}}>
-          <PhotoCamera />
-          <Typography sx={{marginLeft:"4px"}}>  Profile Picture </Typography>
-        </IconButton>
+          <Input
+            accept="image/*"
+            id="icon-button-file"
+            type="file"
+            onChange={(e) => postDetails(e.target.files[0])}
+          />
+          <IconButton
+            color="primary"
+            aria-label="upload picture"
+            component="span"
+            sx={{ border: "solid 1px grey", borderRadius: "5px" }}
+          >
+            <PhotoCamera />
+            <Typography sx={{ marginLeft: "4px" }}>
+              {" "}
+              Profile Picture{" "}
+            </Typography>
+          </IconButton>
         </label>
         <Button
           variant="contained"
@@ -226,26 +243,26 @@ const SignUp = () => {
           color="primary"
           size="large"
           sx={{ width: "50%", position: "relative", left: "25%" }}
-          disabled = {loading ? true : false}
+          disabled={loading ? true : false}
         >
           Sign Up
         </Button>
       </Stack>
       <Snackbar
-        open = {snackStatus}
+        open={snackStatus}
         autoHideDuration={6000}
         onClose={(event, reason) => {
-          if (reason === 'clickaway') {
+          if (reason === "clickaway") {
             return;
           }
           setSnackStatus(false);
         }}
-        message = {snackMessage}
+        message={snackMessage}
         action={
-          <IconButton 
+          <IconButton
             color="inherit"
             onClick={(event, reason) => {
-              if (reason === 'clickaway') {
+              if (reason === "clickaway") {
                 return;
               }
               setSnackStatus(false);
@@ -256,7 +273,6 @@ const SignUp = () => {
         }
       />
     </Container>
-    
   );
 };
 

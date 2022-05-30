@@ -10,9 +10,20 @@ import LoginIcon from '@mui/icons-material/Login';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
-
+import { useHistory } from "react-router-dom";
+import {useEffect} from "react";
 
 const Homepage = () => {
+  const history = useHistory();
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("userInfo"));
+
+    if(user){
+        history.push("/chats");
+    }
+}, [history]);
+
+
   const [value, setValue] = React.useState("one"); //used in tabs
 
   const theme = createTheme({

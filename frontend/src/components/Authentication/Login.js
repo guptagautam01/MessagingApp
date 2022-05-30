@@ -55,14 +55,16 @@ const Login = () => {
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push("/chat");
+      history.push("/chats");
     } catch (error) {
       setSnackMessage(error.response.data.message);
       setSnackStatus(true);
       setLoading(false);
     }
   };
-
+  const refreshPage =async() => {
+    window.location.reload(false);
+  };
   return (
     <Container>
       <Stack spacing={3}>

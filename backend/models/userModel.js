@@ -20,7 +20,7 @@ const userSchema = mongoose.Schema(
         },
         password: {type: String, required:true},
         pic: {type: String,
-        default: "https://img.icons8.com/external-dreamstale-lineal-dreamstale/64/000000/external-avatar-avatars-dreamstale-lineal-dreamstale.png"},
+        default: "https://st3.depositphotos.com/1767687/16607/v/600/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg"},
 
     },
     {

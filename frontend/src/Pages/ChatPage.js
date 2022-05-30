@@ -1,25 +1,40 @@
-import React, {useEffect, useState} from 'react';
-import axios from 'axios';
+import {ChatState} from "../Context/ChatProvider";
+import TopBar from "../components/Chat/TopBar";
+import ChatBox from "../components/Chat/ChatBox";
+import MyChat from "../components/Chat/MyChat"
+import { Container } from "@mui/system";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
 const ChatPage = () => {
-    const [chats, setChats] = useState([]);
-    const fetchChats = async () =>{
-        const {data} = await axios.get("/api/chat");
-
-        setChats(data);
-    };
-
-    useEffect(() => {
-      fetchChats();
-    }, []);
+    const {user} = ChatState();
+    const theme = createTheme({
+      palette: {
+        primary: {
+          main: "#115041",
+        },
+        secondary: {
+          main: "#172544",
+        },
+      },
+    });
     
-  return (
-    <div>
-        {
-            chats.map(chat => (
-                <div key={chat._id}>{chat.chatName} </div>
-            ))
-        }
+  return (  
+    <ThemeProvider theme={theme}>
+    <div style={{width:"100%"}}>
+      {user && <TopBar/> }
+      <Container sx={{
+        display:"flex", 
+        justifyContent:"space-between", 
+        width:"100%", 
+        height:"90%", 
+        padding:"10px", 
+        // border:"solid"
+      }}>
+        {user && <MyChat />}
+        {user && <ChatBox />}
+      </Container>
     </div>
+    </ThemeProvider>
   )
 }
 

@@ -13,8 +13,8 @@ const accessChat = asyncHandler(async (req, res) => {
   var isChat = await Chat.find({
     isGroupChat: false,
     $and: [
-      { users: { $elemMatch: { $eq: req.user._id } } },
-      { users: { $elemMatch: { $eq: userId } } },
+      { user: { $elemMatch: { $eq: req.user._id } } },
+      { user: { $elemMatch: { $eq: userId } } },
     ],
   })
     .populate("user", "-password")

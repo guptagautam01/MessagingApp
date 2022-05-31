@@ -4,6 +4,7 @@ import ChatBox from "../components/Chat/ChatBox";
 import MyChat from "../components/Chat/MyChat"
 import { Container } from "@mui/system";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import {useState} from "react";
 
 const ChatPage = () => {
     const {user} = ChatState();
@@ -17,6 +18,8 @@ const ChatPage = () => {
         },
       },
     });
+
+    const [fetchAgain, setFetchAgain] = useState(false);
     
   return (  
     <ThemeProvider theme={theme}>
@@ -30,8 +33,8 @@ const ChatPage = () => {
         padding:"10px", 
         // border:"solid"
       }}>
-        {user && <MyChat />}
-        {user && <ChatBox />}
+        {user && <MyChat fetchAgain={fetchAgain}/>}
+        {user && <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain}/>}
       </Container>
     </div>
     </ThemeProvider>

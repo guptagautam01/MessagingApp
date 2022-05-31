@@ -132,6 +132,7 @@ const GroupChatModal = ({children}) => {
                             onDelete={() => handleDelete(u)} 
                             avatar={<Avatar src={u.pic} />} 
                             label={u.name}
+                            sx={{marginBottom: "5px"}}
                         />
                     ))}
                 </Stack>

@@ -228,7 +228,7 @@ const MyChat = () => {
                   src={
                     !chat.isGroupChat
                       ? getSenderPic(loggedUser, chat.user)
-                      : "https://st3.depositphotos.com/1767687/16607/v/600/depositphotos_166074422-stock-illustration-default-avatar-profile-icon-grey.jpg"
+                      : "https://i.ibb.co/h7brGtF/image.png"
                   }
                   sx={{
                     width: 40,

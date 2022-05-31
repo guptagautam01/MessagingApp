@@ -22,6 +22,7 @@ import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "./UserListItem";
 import { getSender, getSenderPic } from "../../config/ChatLogics";
+import GroupChatModal from "./GroupChatModal";
 const MyChat = () => {
   const [loggedUser, setLoggedUser] = useState();
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
@@ -66,6 +67,8 @@ const MyChat = () => {
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);
       setLoading(false);
+      setSearchResult([]);
+      setSearch("");
       handleClose();
     } catch (error) {
       console.log(error);
@@ -127,11 +130,13 @@ const MyChat = () => {
               sx={{ border: "1.5px solid", borderRadius: "5px" }}
             />
           </IconButton>
-          <IconButton color="primary" sx={{ alignSelf: "right" }}>
-            <GroupAddSharpIcon
-              sx={{ border: "1.5px solid", borderRadius: "5px" }}
-            />
-          </IconButton>
+          <GroupChatModal>
+            <IconButton color="primary" sx={{ alignSelf: "right" }}>
+              <GroupAddSharpIcon
+                sx={{ border: "1.5px solid", borderRadius: "5px" }}
+              />
+            </IconButton>
+          </GroupChatModal>
         </Box>
       </Box>
       <Drawer anchor="left" open={drawer} onClose={handleClose}>
@@ -228,7 +233,7 @@ const MyChat = () => {
                   src={
                     !chat.isGroupChat
                       ? getSenderPic(loggedUser, chat.user)
-                      : "https://i.ibb.co/h7brGtF/image.png"
+                      : ""
                   }
                   sx={{
                     width: 40,
@@ -236,7 +241,13 @@ const MyChat = () => {
                     marginRight: "10px",
                     height: 40,
                   }}
-                ></Avatar>
+                >
+                  {
+                  chat.isGroupChat
+                    ? chat.chatName.substr(0,2).toUpperCase()
+                    : ""
+                }
+                </Avatar>
                 <Typography variant="subtitle2">
                   {!chat.isGroupChat
                     ? getSender(loggedUser, chat.user)

@@ -14,6 +14,7 @@ import {
   Button,
   Stack,
   Avatar,
+  Tooltip,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonSearchSharpIcon from "@mui/icons-material/PersonSearchSharp";
@@ -121,6 +122,7 @@ const MyChat = ({fetchAgain}) => {
       >
         My Chats
         <Box>
+          <Tooltip title="Search User">
           <IconButton
             color="primary"
             sx={{ alignSelf: "right" }}
@@ -130,12 +132,15 @@ const MyChat = ({fetchAgain}) => {
               sx={{ border: "1.5px solid", borderRadius: "5px" }}
             />
           </IconButton>
+          </Tooltip>
           <GroupChatModal>
+            <Tooltip title="Create Group Chat">
             <IconButton color="primary" sx={{ alignSelf: "right" }}>
               <GroupAddSharpIcon
                 sx={{ border: "1.5px solid", borderRadius: "5px" }}
               />
             </IconButton>
+            </Tooltip>
           </GroupChatModal>
         </Box>
       </Box>

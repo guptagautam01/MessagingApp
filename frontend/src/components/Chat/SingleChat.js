@@ -23,13 +23,19 @@ import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import SendSharpIcon from "@mui/icons-material/SendSharp";
 import axios from "axios";
 import SendSharp from "@mui/icons-material/SendSharp";
+import ScrollableChat from "./ScrollableChat";
+
+import io from 'socket.io-client';
+const ENDPOINT = "http://localhost:5000";
+var socket, selectedChatComapre;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState();
   const { user, selectedChat, setSelectedChat } = ChatState();
-
+  
+  const [socketConnected, setSocketConnected] = useState(false)
   const fetchMessages = async () => {
     if (!selectedChat) return;
     try {
@@ -108,6 +114,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.log("sed");
     }
   };
+  
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on('connection', () => {setSocketConnected(true)})
+  }, [])
+  
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
@@ -160,6 +173,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           <Box
             sx={{
               display: "flex",
+              flexDirection:"column",
               justifyContent: "flex-end",
               padding: "12px",
               background: "#C3C3C3",
@@ -169,14 +183,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               overflowY: "hidden",
             }}
           >
-            {loading ? <></> : <div></div>}
+            {loading ? <></> : 
+            <div className = "messages">
+              <ScrollableChat messages={messages} />
+            </div>
+            }
           </Box>
           <FormControl
             onKeyDown={sendMessage}
             required
             fullWidth
             sx={{ paddingTop: "5px" }}
-          >
+          > 
             <Box sx={{ width: "100%", display: "flex" }}>
               <TextField
                 size="small"

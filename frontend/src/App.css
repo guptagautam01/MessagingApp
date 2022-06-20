@@ -3,8 +3,10 @@
   display: flex;
   background-image: linear-gradient(to top right, #37d4a1, #22a492);
 }
-.feed{
+.messages{
+  height: 100%;
   overflow-y: scroll;
+  /* border: 2px solid red; */
 }
 .signUpConatiner{
   height: 60vh;

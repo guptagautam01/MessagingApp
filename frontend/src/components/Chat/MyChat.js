@@ -253,11 +253,16 @@ const MyChat = ({fetchAgain}) => {
                     : ""
                 }
                 </Avatar>
-                <Typography variant="subtitle2">
+                <Stack>
+                <Typography variant="subtitle2" sx={{fontSize: 15}}>
                   {!chat.isGroupChat
                     ? getSender(loggedUser, chat.user)
                     : chat.chatName}
                 </Typography>
+                {/* <Typography variant="body2" sx={{fontSize: 13}}>
+                  {!chat.latestMessage ? "Click to Start Chatting" : chat.latestMessage.content}
+                </Typography> */}
+                </Stack>
               </Box>
             ))}
           </Stack>

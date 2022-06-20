@@ -24,6 +24,7 @@ import SendSharpIcon from "@mui/icons-material/SendSharp";
 import axios from "axios";
 import SendSharp from "@mui/icons-material/SendSharp";
 import ScrollableChat from "./ScrollableChat";
+import '../../App.css'
 
 import io from 'socket.io-client';
 const ENDPOINT = "http://localhost:5000";
@@ -36,6 +37,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
   
   const [socketConnected, setSocketConnected] = useState(false)
+  
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", user);
+    socket.on('connection', () => {setSocketConnected(true)} )
+  }, [])
+  
   const fetchMessages = async () => {
     if (!selectedChat) return;
     try {
@@ -51,6 +59,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       );
       setMessages(data);
       setLoading(false);
+
+      socket.emit('join chat', selectedChat._id);
     } catch (error) {
       console.log("Could Not get Messages");
       setLoading(false);
@@ -58,8 +68,28 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
   useEffect(() => {
     fetchMessages();
+
+    selectedChatComapre = selectedChat;
   }, [selectedChat]);
 
+  
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if(!selectedChatComapre || selectedChatComapre._id != newMessageRecieved.chat._id){
+        //give notification
+        // const chatRecd = newMessageRecieved.chat;
+        // {!chatRecd.isGroupChat ? setSnackbarContent(getSender(user, chatRecd.user)) : setSnackbarContent(chatRecd.chatName)}
+        // // setSnackbarContent(newMessageRecieved.chat.chatName)
+        // console.log(chatRecd.user);
+        // console.log(user);
+        // setSnackbarDisplay(true);
+      }
+      else{
+        setMessages([...messages, newMessageRecieved]);
+      }
+    })  
+  })
+  
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
       try {
@@ -79,6 +109,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           config
         );
         // console.log(data);
+        socket.emit("new message", data);
+        console.log(data);
         setMessages([...messages, data]);
       } catch (error) {
         console.log("Failed To send Message");
@@ -106,21 +138,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           config
         );
         // console.log(data);
+        socket.emit("new message", data);
+        console.log(data);
         setMessages([...messages, data]);
       } catch (error) {
         console.log("Failed To send Message");
       }
     } else {
-      console.log("sed");
+      console.log("Typing...");
     }
   };
   
-  useEffect(() => {
-    socket = io(ENDPOINT);
-    socket.emit("setup", user);
-    socket.on('connection', () => {setSocketConnected(true)})
-  }, [])
-  
+
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value);

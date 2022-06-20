@@ -49,7 +49,7 @@ const TopBar = () => {
           IM App
         {/* </h3> */}
       </Typography>
-      <IconButton
+      {/* <IconButton
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
@@ -69,7 +69,7 @@ const TopBar = () => {
       >
          <MenuItem onClick={handleClose}>Profile1</MenuItem>
         <MenuItem onClick={handleClose}>Logout1</MenuItem>
-      </Menu>
+      </Menu> */}
 
       <IconButton
         id="basic-button"

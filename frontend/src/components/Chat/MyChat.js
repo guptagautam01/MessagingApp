@@ -25,8 +25,8 @@ import UserListItem from "./UserListItem";
 import { getSender, getSenderPic } from "../../config/ChatLogics";
 import GroupChatModal from "./GroupChatModal";
 const MyChat = ({fetchAgain}) => {
-  const [loggedUser, setLoggedUser] = useState();
   const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+  const [loggedUser, setLoggedUser] = useState(user);
   const [drawer, setDrawer] = useState(false);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
